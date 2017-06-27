@@ -1,0 +1,359 @@
+#login-container
+{
+	background-color: white;
+}
+
+#login-container .canvas
+{
+	width: 100%;
+	max-width: 480px;
+}
+
+#login-container .canvas md-input-container.password
+{
+	margin-top: 0px; 
+}
+
+#setup-container .canvas
+{
+	background-color: white;
+}
+
+#setup-container .canvas > div
+{
+	width: 100%;
+	max-width: 480px;
+	background-color: #f7f7f7;
+}
+
+#setup-container .canvas .status-bar
+{
+	min-height: 48px;
+	border-radius: 3px 3px 0 0;
+	height: 48px;
+	padding-right: 0px;
+	background-color: rgb(33,150,243);
+	padding-left: 0px;
+	overflow: auto;
+}
+
+#setup-container .canvas .button-save-account
+{
+	width: 100%;
+	margin:0px 0px 0px 0px;
+}
+
+#setup-container .canvas .option-panel
+{
+	background-color: #f7f7f7;
+	width:100%;
+	padding-left: 25px;
+}
+
+#setup-container .canvas .button-save-phone
+{
+	width: 100%;
+	margin:20px 0px 0px 0px;
+}
+
+#setup-container .canvas .warning
+{
+	padding:5px;
+	margin-top: 10px;
+	background-color: rgb(244, 67, 54);
+	color: white;
+	line-height: 32px;
+  vertical-align: middle;
+  font-weight: 500;
+  letter-spacing: .01em;
+  font-size: 14px;
+  align-items: center;
+  text-align: center;
+  border-radius: 3px;
+  box-sizing: border-box;	
+}
+
+#home-container .canvas
+{
+	background-color: white;
+	height: 100%;
+}
+
+#home-container .canvas > div
+{
+	width: 100%;
+	max-width: 480px;
+}
+
+#home-container .canvas .status-bar
+{
+	min-height: 48px;
+	border-radius: 3px 3px 0 0;
+	height: 48px;
+	padding-right: 0px;
+	background-color: rgb(33,150,243);
+	overflow: auto;
+}
+
+#home-container .canvas .status-bar .name
+{
+	font-size: 0.9em;
+}
+
+#home-container .canvas .keypad
+{
+	background-color: white;
+}
+
+#home-container .canvas .keypad .md-button
+{
+	margin:0px;
+}
+
+#home-container .canvas .keypad .md-button > div
+{
+	font-size: 2.2em;
+	line-height: 1.4em;
+	color: rgb(33,150,243);
+}
+
+#home-container .canvas .keypad .md-button span
+{
+	font-size: 0.8em;
+	line-height: 0.8em;
+	color:rgba(0,0,0,0.38);
+}
+
+#home-container .canvas .call-control .md-button
+{
+	height:50px; 
+	width: 40px;
+}
+
+#home-container .canvas .call-control .md-button md-icon
+{
+	height:35;
+	width: 35px;
+}
+
+#home-container .canvas .button-hang-up
+{
+	margin: 0px;
+	background-color: #e53935;
+}
+
+#home-container .canvas .button-hang-up md-icon
+{
+	transform: rotate(135deg);
+}
+
+#home-container .canvas .button-accept
+{
+	margin: 0px;
+	background-color: #00c853;
+}
+
+#home-container .canvas .button-call
+{
+	margin: 0px;
+	background-color: #00c853;
+}
+
+#home-container .canvas .button-ignore
+{
+	margin: 0px;
+	background-color: #e53935;
+}
+
+#home-container .canvas .button-ignore md-icon
+{
+	transform: rotate(135deg);
+}
+
+#home-container .canvas .setup
+{
+	margin: 10px 0 0 0;
+}
+
+#home-container .canvas .setup .md-button
+{
+	margin:0;
+}
+
+#home-container .canvas .keypad-display
+{
+	margin-bottom: 0px;
+}
+
+#home-container .canvas .keypad-display > div
+{
+	padding:0px;
+}
+
+#home-container .canvas .keypad-display .warning
+{
+	background-color: rgb(244, 67, 54);
+	color: white;
+	line-height: 26px;
+  vertical-align: middle;
+  font-weight: 500;
+  letter-spacing: .01em;
+  font-size: 14px;
+  align-items: center;
+  text-align: center;
+  box-sizing: border-box;	
+}
+
+#home-container .canvas .keypad-display md-icon
+{
+	min-width: 60px
+}
+
+#home-container .canvas .keypad-display input
+{
+	width:100%;
+ 	font-family: 'Roboto';
+ 	color:rgba(0,0,0,0.54);
+ 	outline: none;
+ 	line-height:1.2em;
+ 	font-size: 2.2em;
+ 	border: 0px;
+}
+
+#home-container .canvas .keypad-display .md-button
+{
+	margin: 0px;
+	border-radius:0px;
+	background-color: white;
+	min-width: 60px;
+}
+
+#home-container .canvas .phone
+{
+	max-height: 800px;
+	width: 100%;
+	max-width: 480px; 
+}
+
+#home-container .canvas .history
+{
+	overflow: auto;
+}
+
+#home-container .offline-warning
+{
+	background-color: rgb(244, 67, 54);
+	color: white;
+	line-height: 46px;
+  vertical-align: middle;
+  font-weight: 500;
+  letter-spacing: .01em;
+  font-size: 14px;
+  align-items: center;
+  text-align: center;
+  box-sizing: border-box;	
+}
+
+#home-container .canvas .voice-insights-warning
+{
+	background-color: rgb(244, 67, 54);
+	color: white;
+	line-height: 28px;
+  vertical-align: middle;
+  font-weight: 500;
+  letter-spacing: .01em;
+  font-size: 14px;
+  align-items: center;
+  text-align: center;
+  box-sizing: border-box;	
+}
+
+/* network warning */
+md-toast
+{
+	width: 100%;
+}
+
+md-toast .md-toast-content
+{
+	background-color: rgb(244, 67, 54);
+	max-height: 48px;
+}
+
+md-toast .md-toast-content .canvas
+{
+	max-width: 480px;
+	background-color: transparent !important;
+}
+
+md-toast .md-toast-content .canvas md-icon.warning
+{
+	width:38px;
+	height: 38px;
+}
+
+md-toast .md-toast-content .canvas .md-toast-text
+{
+	line-height: 56px;
+	font-weight: bold;
+}
+
+/* display toast on top on small screens */
+@media (max-width: 959px)
+{
+	md-toast
+	{
+		 top: 0;
+		 height: 56px;
+	}
+}
+
+#home-container .canvas .call .phone-number
+{
+	text-align: left;
+	color: #45383A;
+}
+
+#home-container .canvas .call .status
+{
+	color:rgba(0,0,0,0.38);
+}
+
+#home-container .canvas .history .item .completed
+{
+	width: 48px;
+	height: 40px;
+}
+
+#home-container .canvas .history .item .completed > div
+{
+	background-color: #e53935;
+	border-radius: 8px;
+	width: 16px;
+	height: 16px;
+	position: absolute;
+	left: 26px;
+	top: 26px;
+}
+
+#home-container .canvas .history .item .uncompleted
+{
+	width: 48px;
+	height: 40px;
+}
+
+#home-container .canvas .history .item .uncompleted > div
+{
+	background-color: #00c853;
+	border-radius: 8px;
+	width: 16px;
+	height: 16px;
+	position: absolute;
+	left: 26px;
+	top: 26px;
+}
+
+#home-container .canvas .history .item .md-list-item-text
+{
+	cursor: pointer;
+}

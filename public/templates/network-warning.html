@@ -1,0 +1,23 @@
+<md-toast>
+
+	<div class="md-toast-content" layout-align="center center">
+
+		<div flex="100" layout="row" layout-align="center center">
+
+			<div flex="100" layout="row" class="canvas">
+
+				<md-icon class="warning" flex="none" layout-align="start" md-svg-src="/images/icon-warning.svg"></md-icon>
+
+				<div flex="100" class="md-toast-text">Network Warning: {{message}}</div>
+
+				<md-button flex="none" ng-click="closeToast()" layout-align="end">
+					<md-icon md-svg-src="/images/icon-close.svg" aria-label="close"></md-icon>
+				</md-button>
+
+			</div>
+
+		</div>
+
+	</div>
+
+</md-toast>

@@ -1,0 +1,101 @@
+<html lang="en" >
+<head>
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<link rel="stylesheet" href="/styles/angular-material.min.css">
+	<link rel="stylesheet" href="/styles/default.css">
+	<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700,400italic">
+	<title>Twilio Phone</title>
+	<link rel="icon" type="image/png" href="/images/favicon.png" />
+</head>
+
+<body id="login-container" ng-app="phoneApplication" ng-cloak>
+
+	<div layout="column" layout-align="center center">
+
+		<div class="canvas" layout="column">
+
+			<div hide-gt-xs layout-xs layout-margin>
+				<div flex="100" class="md-headline">{{title}}</div>
+			</div>
+
+			<div hide-xs layout-gt-xs layout-padding>
+				<div flex="100" class="md-display-1">{{title}}</div>
+			</div>
+
+			<md-tabs md-dynamic-height md-border-bottom md-stretch-tabs="always" class=" md-whiteframe-z1">
+
+				<md-tab label="Login" md-on-select="title='Already signed up?'">
+				 <md-content class="md-padding" ng-controller="LoginController">
+
+					 <form name="loginForm" ng-submit="login()">
+						<md-input-container md-no-float class="md-block">
+							<input name="friendlyName" ng-required="required" ng-model="user.friendlyName" placeholder="Your Name">
+						</md-input-container>
+
+						<md-input-container md-no-float class="md-block password">
+							<input name="password" type="password" ng-required="required" ng-model="user.password" placeholder="Password">
+							<div ng-messages for="loginForm.password.$error">
+								<div ng-message when="invalid">Name or password invalid</div>
+							</div>
+						</md-input-container>
+						
+						<md-button type="submit" ng-disabled="!user.friendlyName || !user.password" class="md-raised md-primary">Log In</md-button>
+					</form>
+					
+				</md-content>
+			</md-tab>
+
+			<md-tab md-on-select="title = 'New here?'" label="Register">
+
+				<md-content class="md-padding" ng-controller="RegisterController">
+				 <form autocomplete="off" name="registerForm" ng-submit="register()">
+					 <md-input-container md-no-float class="md-block">
+						 <input name="friendlyName" ng-required="required" ng-minlength="3" 
+						 ng-maxlength="20" ng-focus="reset()" ng-model="user.friendlyName" placeholder="Your Name">
+						 <div ng-messages for="registerForm.friendlyName.$error">
+							<p ng-message when="minlength">Your name is too short.</p>
+							<p ng-message when="maxlength">Your name is too long.</p>
+							<p ng-message when="unique">Name already exits.</p>
+							<p ng-message when="server">Server error.</p>
+						</div>
+
+					</md-input-container>
+
+					<md-input-container md-no-float class="md-block password">
+					 <input name="password" type="password" strong-password ng-required="required" ng-model="user.password" placeholder="Password">
+					 
+					 <div ng-messages for="registerForm.password.$error">
+						<p ng-message when="minlength">Your password is too short.</p>
+						<p ng-message when="maxlength">Your password is too long.</p>
+						<p ng-message when="complexity">The password must contain at least three of the following character; uppercase letters, lowercase letters, numbers or special characters, e.g., ! @ # ?.</p>
+					</div>
+
+				</md-input-container>
+
+				<md-button type="submit" ng-disabled="!user.friendlyName || !user.password || registerForm.$invalid" class="md-raised md-primary">Sign Up</md-button>
+			</form>
+		</md-content>
+
+	</md-tab>
+
+</div>
+
+</div>
+
+<!-- Angular Libraries -->
+<script src="/scripts/angular.min.js"></script>
+<script src="/scripts/angular-animate.min.js"></script>
+<script src="/scripts/angular-aria.min.js"></script>
+<script src="/scripts/angular-messages.min.js"></script>
+<script src="/scripts/angular-material.min.js"></script>
+
+<!-- Application Libraries -->
+<script src="/scripts/PhoneApp.js"></script>
+<script src="/scripts/controllers/LoginController.js"></script>
+<script src="/scripts/controllers/RegisterController.js"></script>
+<script src="/scripts/services/LoginService.js"></script>
+<script src="/scripts/services/RegisterService.js"></script>
+<script src="/scripts/directives/StrongPasswordDirective.js"></script>
+
+</body>
+</html>

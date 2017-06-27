@@ -1,0 +1,411 @@
+<html lang="en" >
+<head>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="/styles/angular-material.min.css">
+  <link rel="stylesheet" href="/styles/default.css">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700,400italic">
+  <title>Twilio Phone</title>
+  <link rel="icon" type="image/png" href="/images/favicon.png" />
+</head>
+
+<body id="home-container" ng-app="phoneApplication" id="appContainer" ng-cloak>
+
+  <div layout="column" class="canvas" ng-controller="PhoneController as phone" ng-init="init()" layout-align="center center">
+
+  <div class="md-whiteframe-z1 layout-column flex-none" layout-padding ng-show="state == 'setup-required'" flex="100">
+
+     <md-card-title>
+      <md-card-title-text>
+        <span class="md-headline">Setup Required</span>
+      </md-card-title-text>
+    </md-card-title>
+
+    <md-card-content>
+     Phone is not configured, run setup first.
+     <section class="setup" layout="row" layout-sm="column">
+       <md-button ng-click="openSetup()" class="md-raised md-primary" aria-label="Favorite">
+        Setup
+      </md-button>
+    </section>
+  </md-card-content>
+
+</div>
+
+<div ng-show="state != 'setup-required'" flex="100" class="md-whiteframe-z1 phone" layout="column">
+  <md-toolbar flex="none" class="md-toolbar-tools status-bar" layout="row"  layout-align="space-between center">
+    <div flex="none" class="name" ng-bind="user.friendlyName"></div>
+    <div  flex="none">
+      <md-button ng-click="openSetup()" class="md-icon-button md-accent" aria-label="Setup">
+        <md-icon md-svg-icon="images/icon-setup.svg"></md-icon>
+      </md-button>
+    </div>
+
+  </md-toolbar>
+
+  <div ng-show="isInvalidBrowser" flex="100" layout="column">
+    <div class="offline-warning" style="line-height: 1.3em;" layout-padding>{{invalidBrowserMessage}}</div>
+  </div>
+
+  <div ng-show="isOffline" flex="100" layout="column">
+    <div class="offline-warning">Phone is offline.</div>
+  </div>
+
+  <md-tabs flex="100" ng-show="!isOffline && !isInvalidBrowser" md-selected="tabIndex" class="md-primary" md-stretch-tabs="always" md-swipe-content>
+
+    <md-tab label="Phone">
+
+      <div ng-controller="PhoneCallController">
+        <div flex="100" layout="column" ng-show="state == 'incoming'">
+
+          <div class="call" flex="35" layout="row" layout-align="start center" layout-padding>
+
+            <div class="md-display-1 phone-number">
+              <span class="md-subhead status">incoming call from</span><br>
+              {{phoneNumber}}
+            </div>
+          </div> 
+
+            <div flex="35">&nbsp;</div>
+
+            <md-button class="button-ignore" ng-click="ignore()" flex="15">
+              <md-icon md-svg-src="images/icon-call.svg"></md-icon>
+            </md-button>
+
+            <div flex="none" style="height: 10px"></div>
+
+            <md-button class="button-accept" ng-click="accept()" flex="15">
+              <md-icon md-svg-src="images/icon-call.svg"></md-icon>
+            </md-button>
+
+          </div>
+
+          <div flex="100" layout="column" ng-show="state == 'busy'">
+
+            <div ng-show="mode == 'keypad'" flex="100" layout="column">
+
+              <div class="call-control" flex="30" layout="row" layout-align="center center">
+
+                <div ng-show="isMuted">
+                  <md-button ng-click="toggleMute()">
+                    <md-icon md-svg-src="images/icon-microphone-off.svg"></md-icon>
+                  </md-button>
+                </div>
+
+                <div ng-show="!isMuted">
+                  <md-button ng-click="toggleMute()">
+                    <md-icon md-svg-src="images/icon-microphone-on.svg"></md-icon>
+                  </md-button>
+                </div>
+
+                <div>
+                 <md-button ng-click="toggleKeypad()">
+                  <md-icon md-svg-src="images/icon-keypad.svg"></md-icon>
+                </md-button>
+              </div>
+
+            </div>
+
+            <div flex="70" class="keypad" layout-wrap layout="row">
+
+              <md-button ng-click="sendDigits('1')" flex="33">
+                <div class="md-headline">1</div>
+                <span>&nbsp;</span>
+              </md-button>
+
+              <md-button ng-click="sendDigits('2')" flex="33">
+                <div class="md-headline">2</div>
+                <span>ABC</span>
+              </md-button>
+
+              <md-button ng-click="sendDigits('3')" flex="33">
+                <div class="md-headline">3</div>
+                <span>DEF</span>
+              </md-button>
+
+              <md-button ng-click="sendDigits('4')" flex="33">
+                <div class="md-headline">4</div>
+                <span>GHI</span>
+              </md-button>
+
+              <md-button ng-click="sendDigits('5')" flex="33">
+                <div class="md-headline">5</div>
+                <span>JKL</span>
+              </md-button>
+
+              <md-button ng-click="sendDigits('6')" flex="33">
+                <div class="md-headline">6</div>
+                <span>MNO</span>
+              </md-button>
+
+              <md-button ng-click="sendDigits('7')" flex="33">
+                <div class="md-headline">7</div>
+                <span>PQRS</span>
+              </md-button>
+
+              <md-button ng-click="sendDigits('8')" flex="33">
+                <div class="md-headline">8</div>
+                <span>TUV</span>
+              </md-button>
+
+              <md-button ng-click="sendDigits('9')" flex="33">
+                <div class="md-headline">9</div>
+                <span>WXYZ</span>
+              </md-button>
+
+              <md-button flex="33" ng-click="sendDigits('*')">
+                <div style="color:rgba(0,0,0,0.38)" class="md-headline">*</div>
+                <span>&nbsp;</span>
+              </md-button>
+
+              <md-button ng-click="sendDigits('0')" flex="33">
+                <div class="md-headline">0</div>
+                <span>+</span>
+              </md-button>
+
+              <md-button ng-click="sendDigits('#')" flex="33">
+                <div style="color:rgba(0,0,0,0.38)" class="md-headline">#</div>
+                <spaN>&nbsp;</span>
+                </md-button>
+
+              </div>
+
+            </div>
+
+            <div ng-show="mode == 'status'" flex="100" layout="column">
+
+              <div class="call" flex="35" layout="row" layout-align="start center" layout-padding>
+
+                <div class="md-display-1 phone-number">
+                  <span class="md-subhead status">{{duration | ElapsedTime}}</span><br>
+                  {{phoneNumber}}
+                </div>
+              </div> 
+
+              <div flex="25">&nbsp;</div>
+                
+              <div class="call-control" flex="30" layout="row" layout-align="center center">
+                <div ng-show="isMuted">
+                  <md-button ng-click="toggleMute()">
+                    <md-icon md-svg-src="images/icon-microphone-off.svg"></md-icon>
+                  </md-button>
+                </div>
+
+                <div ng-show="!isMuted">
+                  <md-button ng-click="toggleMute()">
+                    <md-icon md-svg-src="images/icon-microphone-on.svg"></md-icon>
+                  </md-button>
+                </div>
+
+                <div>
+                 <md-button ng-click="toggleKeypad()">
+                  <md-icon md-svg-src="images/icon-keypad.svg"></md-icon>
+                </md-button>
+              </div>
+
+            </div>
+
+            <div flex="20">&nbsp;</div>
+
+            <md-button class="button-hang-up" ng-click="hangUp()" flex="20">
+              <md-icon md-svg-src="images/icon-call.svg"></md-icon>
+            </md-button>
+
+          </div>
+
+        </div>
+
+      </div>
+
+      <div style="height: 100%" flex="100" layout="column" layout-align="center center" ng-show="state == 'idle' && !user.configuration.phone.outbound.isActive">
+        <div>Waiting for incoming calls ...</div>
+      </div>
+
+      <div style="height: 100%" flex="100" layout="column" layout-align="center center" ng-show="state == 'error' && !user.configuration.phone.outbound.isActive">
+        <div>Waiting for incoming calls ...</div>
+      </div>
+
+      <div ng-show="state == 'idle' && user.configuration.phone.outbound.isActive" ng-controller="PhoneKeypadController" flex="100" layout="column">
+
+        <form class="keypad-display" name="callForm" flex="20" layout="column">
+          <div layout="row" flex="100">
+            <md-icon flex="none" md-svg-src="images/icon-plus.svg">
+          </md-icon>
+
+          <input name="phoneNumber" ng-model="phoneNumber" phone-number flex="100" type="text" ng-paste="paste($event)">
+
+          <md-button aria-label="remove" ng-click="remove()" flex="none">
+            <md-icon md-svg-src="images/icon-delete.svg"></md-icon>
+          </md-button>
+
+        </div>
+
+        <div flex="none" class="warning" ng-style="{'visibility': (callForm.phoneNumber.$error.invalidPhone && phoneNumber.length > 5 )?'visible':'hidden'}">
+          Invalid phone number
+        </div>
+
+      </form>
+
+      <div flex="65" class="keypad" layout-wrap layout="row">
+
+        <md-button ng-click="add('1')" flex="33">
+          <div class="md-headline">1</div>
+          <span>&nbsp;</span>
+        </md-button>
+
+        <md-button ng-click="add('2')" flex="33">
+          <div class="md-headline">2</div>
+          <span>ABC</span>
+        </md-button>
+
+        <md-button ng-click="add('3')" flex="33">
+          <div class="md-headline">3</div>
+          <span>DEF</span>
+        </md-button>
+
+        <md-button ng-click="add('4')" flex="33">
+          <div class="md-headline">4</div>
+          <span>GHI</span>
+        </md-button>
+
+        <md-button ng-click="add('5')" flex="33">
+          <div class="md-headline">5</div>
+          <span>JKL</span>
+        </md-button>
+
+        <md-button ng-click="add('6')" flex="33">
+          <div class="md-headline">6</div>
+          <span>MNO</span>
+        </md-button>
+
+        <md-button ng-click="add('7')" flex="33">
+          <div class="md-headline">7</div>
+          <span>PQRS</span>
+        </md-button>
+
+        <md-button ng-click="add('8')" flex="33">
+          <div class="md-headline">8</div>
+          <span>TUV</span>
+        </md-button>
+
+        <md-button ng-click="add('9')" flex="33">
+          <div class="md-headline">9</div>
+          <span>WXYZ</span>
+        </md-button>
+
+        <md-button flex="33" ng-click="add('*')">
+          <div style="color:rgba(0,0,0,0.38)" class="md-headline">*</div>
+          <span>&nbsp;</span>
+        </md-button>
+
+        <md-button ng-click="add('0')" flex="33">
+          <div class="md-headline">0</div>
+          <span>+</span>
+        </md-button>
+
+        <md-button ng-click="add('#')" flex="33">
+          <div style="color:rgba(0,0,0,0.38)" class="md-headline">#</div>
+          <span>&nbsp;</span>
+        </md-button>
+
+      </div>
+
+      <md-button class="button-call" aria-label="call" ng-click="call()" flex="15">
+        <md-icon md-svg-src="images/icon-call.svg"></md-icon>
+      </md-button>
+
+    </div>
+
+
+  </md-tab>
+  <md-tab label="Activity" md-on-select="initHistory()">
+
+    <div flex="100" layout="column" ng-controller="PhoneCallHistoryController">
+
+      <div flex="100" class="history">
+
+       <md-content>
+        <md-list>
+
+          <md-list-item class="md-3-line call item" ng-repeat="call in calls track by call.sid">
+
+            <div class="completed" ng-if="call.status !='completed'">
+              <div>&nbsp;</div>
+            </div>
+
+            <div class="uncompleted" ng-if="call.status =='completed'">
+              <div>&nbsp;</div>
+            </div>
+
+            <div class="md-list-item-text" ng-click="select(call)" ng-if="call.direction == 'outbound'">
+              <h3>
+                <b>You</b> 
+                <span ng-if="call.status =='completed'">called</span>
+                <span ng-if="call.status !='completed'">tried to call</span>
+                <b>{{call.to}}</b>
+              </h3>
+
+              <h4 class="date">{{call.updatedAt | CallDate}}<span ng-if="call.duration"">, {{call.duration | CallDuration}}  </h4>
+
+            </div>
+
+            <div class="md-list-item-text" ng-click="select(call)" ng-if="call.direction == 'inbound'">
+              <h3>
+                <b>{{call.from}}</b> 
+                <span ng-if="call.status =='completed'">called</span>
+                <span ng-if="call.status !='completed'">tried to call</span>
+                <b>You</b>
+              </h3>
+
+              <h4 class="date">{{call.updatedAt | CallDate}}<span ng-if="call.duration"">, {{call.duration | CallDuration}} </h4>
+
+            </div>
+
+            <md-divider md-inset ng-if="!$last"></md-divider>
+          </md-list-item>
+
+        </md-list>
+
+      </md-content>
+    </div>
+    <md-button ng-show="more" ng-click="fetch()" class="md-raised md-primary" flex="none">more ...</md-button>
+
+  </div>
+
+</md-tab>
+</md-tabs>
+
+</div>
+
+</div>
+
+<script type="text/javascript" src="//media.twiliocdn.com/sdk/js/client/v1.4/twilio.js"></script>
+
+<!-- Angular Libraries -->
+<script src="/scripts/angular.min.js"></script>
+<script src="/scripts/angular-animate.min.js"></script>
+<script src="/scripts/angular-aria.min.js"></script>
+<script src="/scripts/angular-messages.min.js"></script>
+<script src="/scripts/angular-material.min.js"></script>
+
+<script src="/scripts/PhoneApp.js"></script>
+<script src="/scripts/controllers/PhoneController.js"></script>
+<script src="/scripts/controllers/PhoneCallController.js"></script>
+<script src="/scripts/controllers/PhoneKeypadController.js"></script>
+<script src="/scripts/controllers/PhoneCallHistoryController.js"></script>
+<script src="/scripts/controllers/NetworkWarningController.js"></script>
+
+<script src="/scripts/services/PhoneCallHistoryService.js"></script>
+
+<script src="/scripts/filters/CallDurationFilter.js"></script>
+<script src="/scripts/filters/CallDateFilter.js"></script>
+<script src="/scripts/filters/ElapsedTimeFilter.js"></script>
+<script src="/scripts/directives/PhoneNumberDirective.js"></script>
+
+<script src="/scripts/moment.min.js"></script>
+
+<script type="text/javascript">
+  var user = [[{user}]];
+</script>
+
+</body>
+</html>

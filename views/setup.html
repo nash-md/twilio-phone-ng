@@ -1,0 +1,157 @@
+<html lang="en" >
+<head>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="/styles/angular-material.min.css">
+  <link rel="stylesheet" href="/styles/default.css">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700,400italic">
+  <title>Twilio Phone</title>
+  <link rel="icon" type="image/png" href="/images/favicon.png" />
+</head>
+
+<body id="setup-container" ng-app="phoneApplication" ng-controller="SetupAccountController" ng-cloak>
+
+  <div layout="column" layout-align="center center" class="canvas">
+
+    <div flex="none" class="one md-whiteframe-z1" layout="column">
+
+      <md-toolbar flex="none" class="md-toolbar-tools status-bar" layout="row"  layout-align="start center">
+        <div  flex="none">
+          <md-button ng-click="openHome()" class="md-icon-button md-accent" aria-label="Favorite">
+            <md-icon md-svg-icon="images/icon-back.svg"></md-icon>
+          </md-button>
+        </div>
+      </md-toolbar>
+
+      <md-card>
+        <md-card-title>
+          <md-card-title-text>
+            <span class="md-headline">Account Preferences</span>
+            <span class="md-subhead">Please input your Twiliio AccountSid and AuthToken</span>
+          </md-card-title-text>
+        </md-card-title>
+
+        <md-card-content>
+         <form name="accountForm" autocomplete="off">
+          <md-input-container md-no-float class="md-block">
+            <input name="accountSid" type="text" ng-model="account.accountSid" placeholder="accountSid" twilio-account-sid required>
+            <div ng-messages for="accountForm.accountSid.$error">
+              <p ng-message when="required">accountSid is required</p>
+              <p ng-message when="invalid">accountSid is invalid</p>
+            </div>
+          </md-input-container>
+
+          <md-input-container md-no-float class="md-block" style="margin-top: 0px; ">
+            <input type="password" name="authToken" ng-model="account.authToken" placeholder="authToken" twilio-auth-token required>
+            <div ng-messages for="accountForm.authToken.$error">
+              <p ng-message when="required">authToken is required</p>
+              <p ng-message when="invalid">authToken is invalid</p>
+            </div>
+          </md-input-container>
+
+          <div ng-show="state == 'account-validation-in-progress'" layout="row" layout-sm="column" layout-align="space-around">
+            <md-progress-circular md-mode="indeterminate"></md-progress-circular>
+          </div>
+
+          <md-button ng-hide="state == 'account-validation-in-progress'" ng-disabled="!accountForm.$valid" ng-click="save()" class="md-raised md-primary button-save-account">Save Settings</md-button>
+
+          <div ng-show="state == 'account-invalid'" class="warning">Invalid Twilio accountSid and/or AuthToken</div>
+
+        </form>
+      </md-card-content>
+    </md-card>
+
+    <md-card ng-show="state == 'account-valid' || state == 'phone-validation-in-progress' || state == 'phone-invalid' || state == 'phone-valid'" ng-controller="SetupPhoneController">
+      <form name="phoneForm">
+        <md-card-title>
+          <md-card-title-text>
+            <span class="md-headline">Outbound</span>
+          </md-card-title-text>
+        </md-card-title>
+
+        <md-card-content>
+          <md-checkbox ng-model="phone.outbound.isActive" class="md-primary">Use Phone for Outbound</md-checkbox>
+
+          <section class="option-panel" ng-show="phone.outbound.isActive == true" layout="row" layout-padding layout-align="center center">
+
+           <md-radio-group name="phone.mode" value="internal-caller-id" ng-model="phone.outbound.mode" flex="100" class="md-primary">
+
+            <md-radio-button  value="internal-caller-id" ng-model="phone.outbound.mode">Use a twilio number for outbound</md-radio-button>
+
+            <md-select ng-show="phone.outbound.mode == 'internal-caller-id'" ng-model="phone.outbound.phoneNumber">
+              <md-option ng-repeat="item in phoneNumbers.incomingPhoneNumbers" value="{{item.phoneNumber}}">{{item.phoneNumber}}</md-option>
+            </md-select>
+
+            <md-radio-button name="phone.mode" value="external-caller-id" ng-model="phone.outbound.mode">Use a verified caller id</md-radio-button>
+
+            <md-select ng-show="phone.outbound.mode == 'external-caller-id'" ng-model="phone.outbound.callerId">
+              <md-option ng-repeat="item in phoneNumbers.outgoingCallerIds" value="{{item.phoneNumber}}">{{item.phoneNumber}}</md-option>
+            </md-select>
+
+          </md-radio-group>
+
+        </section>
+
+      </md-card-content>
+
+      <md-card-title style="padding-top: 0px;">
+        <md-card-title-text>
+          <span class="md-headline">Inbound</span>
+        </md-card-title-text>
+      </md-card-title>
+
+      <md-card-content>
+
+        <md-checkbox class="md-primary" ng-model="phone.inbound.isActive">Use Phone for Inbound</md-checkbox>
+
+        <section class="option-panel" ng-show="phone.inbound.isActive == true" layout="row" layout-padding layout-align="center center">
+
+          <md-select style="width:100%;" ng-model="phone.inbound.phoneNumber">
+            <md-option ng-repeat="item in phoneNumbers.incomingPhoneNumbers" value="{{item.phoneNumber}}">{{item.phoneNumber}}</md-option>
+          </md-select>
+
+        </section>
+
+        <div class="warning" ng-show="state == 'phone-invalid'">{{message}}</div>
+
+        <div style="margin:20px 0px 0px 0px" ng-show="state == 'phone-validation-in-progress'" layout="row" layout-sm="column" layout-align="space-around">
+          <md-progress-circular md-mode="indeterminate"></md-progress-circular>
+        </div>
+
+        <md-button ng-hide="state == 'phone-validation-in-progress'" ng-disabled="state != 'phone-valid'" ng-click="save()" class="md-raised md-primary button-save-phone">Save Phone Setup</md-button>
+
+      </md-card-content>
+
+    </form>
+  </md-card>
+
+  <div>
+
+  </div>
+
+</div>
+
+<!-- Angular Libraries -->
+<script src="/scripts/angular.min.js"></script>
+<script src="/scripts/angular-animate.min.js"></script>
+<script src="/scripts/angular-aria.min.js"></script>
+<script src="/scripts/angular-messages.min.js"></script>
+<script src="/scripts/angular-material.min.js"></script>
+
+<script src="/scripts/PhoneApp.js"></script>
+<script src="/scripts/controllers/SetupAccountController.js"></script>
+<script src="/scripts/controllers/SetupPhoneController.js"></script>
+
+<script src="/scripts/services/SetupAccountService.js"></script>
+<script src="/scripts/services/SetupPhoneService.js"></script>
+
+<script src="/scripts/directives/TwilioAccountSidDirective.js"></script>
+<script src="/scripts/directives/TwilioApiKeyDirective.js"></script>
+<script src="/scripts/directives/TwilioAuthTokenDirective.js"></script>
+
+<script type="text/javascript">
+  var account = [[{account}]];
+  var phone = [[{phone}]];
+</script>
+
+</body>
+</html>

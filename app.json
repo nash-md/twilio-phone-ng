@@ -1,0 +1,17 @@
+{
+  "name": "Twilio Phone",
+  "description": "A simple phone build with Twilio Client",
+  "repository": "",
+  "logo": "http://node-js-sample.herokuapp.com/node.svg",
+  "keywords": ["node", "express", "twilio", "phone", "webrtc"],
+  "image": "heroku/nodejs",
+  "repository": "https://github.com/nash-md/internal-twilio-phone",
+  "addons": ["mongolab:sandbox"],
+  "success_url": "/",
+  "env": {
+    "SESSION_SECRET": {
+      "description": "The secret to encrypt our session, should be a large unguessable string",
+      "required": "true"
+    }
+  }
+}
