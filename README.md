@@ -2,7 +2,7 @@
 
 A simple phone build with Twilio Client WebRTC, Node, AngularJS Material and MongoDB.
 
-![Twilio Phone](twilio_phone.png){ width=50% }
+<img src="twilio_phone.png" alt="Twilio Phone" width="450">
 
 NOTE: Please review the code if you do not use it just as demo. It has been designed for demo purposes and has not been separately security checked.
 
