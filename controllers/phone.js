@@ -1,9 +1,8 @@
-const Twilio = require('twilio')
+const twilio = require('twilio')
 const VoiceResponse = require('twilio').twiml.VoiceResponse;
 const Call = require('.././models/call.js')
 
 module.exports.incoming = function (req, res) {
-  //  @todo, throw error if inbound mode is disabled
   if (!req.body.To || req.body.To.length === 0) {
     res.status(500).end()
     return
@@ -31,7 +30,7 @@ module.exports.incoming = function (req, res) {
 module.exports.outgoing = function (req, res) {
   let twiml = new VoiceResponse()
 
-  const dial = twiml.dial();
+  const dial = twiml.dial( { callerId: req.user.getCallerId() });
 
   dial.number({
     statusCallbackEvent: 'ringing answered completed',
@@ -60,6 +59,7 @@ module.exports.track = function (req, res) {
     res.setHeader('Content-Type', 'application/xml')
     res.status(200).end()
     return
+
   }
 
   let call = {}
@@ -157,12 +157,12 @@ module.exports.history = function (req, res) {
 }
 
 module.exports.token = function (req, res) {
-  const ClientCapability = Twilio.jwt.ClientCapability
+  const ClientCapability = twilio.jwt.ClientCapability
 
   const capability = new ClientCapability({
     accountSid: req.user.configuration.decrypted.accountSid,
     authToken: req.user.configuration.decrypted.authToken,
-    ttl: 180
+    ttl: 1200
   })
 
   if (req.user.configuration.phone.inbound.isActive === true) {
@@ -186,4 +186,3 @@ module.exports.token = function (req, res) {
   res.setHeader('Cache-Control', 'public, max-age=0')
   res.status(200).send(JSON.stringify(token, null, 3))
 }
-
