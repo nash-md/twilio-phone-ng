@@ -5,24 +5,27 @@ const mongoose = require('mongoose')
 
 mongoose.Promise = global.Promise
 
-const options = { server: { socketOptions: { connectTimeoutMS: 10000 } } }
-mongoose.connect(process.env.MONGODB_URI, options, function onError(error) {
-  if (error) {
-    console.error(error)
-  }
-})
+const options =  { 
+  connectTimeoutMS: 10000,
+  useNewUrlParser: true
+}
+
+mongoose
+  .connect(process.env.MONGODB_URI, options)
+  .then(() => console.log(`connected to ${process.env.MONGODB_URI} ...`))
+  .catch((error) => console.log(error))
 
 const app = express()
 
-app.set('port', (process.env.PORT || 5001))
+app.set('port', (process.env.PORT || 5000))
 app.set('session', 'eatyourowndogfood')
 app.use(compression())
 app.enable('trust proxy')
+
 app.use(function (req, res, next) {
   if (req.secure) {
     next()
   } else {
-    console.log(req.secure)
     res.redirect('https://' + req.headers.host + req.url)
   }
 })

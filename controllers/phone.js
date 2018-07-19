@@ -1,4 +1,5 @@
-const twilio = require('twilio')
+const Twilio = require('twilio')
+const VoiceResponse = require('twilio').twiml.VoiceResponse;
 const Call = require('.././models/call.js')
 
 module.exports.incoming = function (req, res) {
@@ -10,15 +11,16 @@ module.exports.incoming = function (req, res) {
 
   console.log('number to call: %s', req.body.To)
 
-  let twiml = new twilio.TwimlResponse()
+  let twiml = new VoiceResponse()
+  
+  const dial = twiml.dial();
 
-  twiml.dial(null, function (node) {
-    node.client(
-      { statusCallbackEvent: 'ringing answered completed',
+  dial.client(
+    {
+      statusCallbackEvent: 'ringing answered completed',
       statusCallbackMethod: 'POST',
       statusCallback: req.user.getTrackerUrl(req),
-      }, req.user.configuration.twilio.clientName)
-  })
+    }, req.user.configuration.twilio.clientName)
 
   res.setHeader('Content-Type', 'application/xml')
   res.setHeader('Cache-Control', 'public, max-age=0')
@@ -27,15 +29,15 @@ module.exports.incoming = function (req, res) {
 }
 
 module.exports.outgoing = function (req, res) {
-  let twiml = new twilio.TwimlResponse()
+  let twiml = new VoiceResponse()
 
-  twiml.dial({ callerId: req.user.getCallerId() }, function (node) {
-    node.number({
-      statusCallbackEvent: 'ringing answered completed',
-      statusCallbackMethod: 'POST',
-      statusCallback: req.user.getTrackerUrl(req),
-    }, req.body.PhoneNumber)
-  })
+  const dial = twiml.dial();
+
+  dial.number({
+    statusCallbackEvent: 'ringing answered completed',
+    statusCallbackMethod: 'POST',
+    statusCallback: req.user.getTrackerUrl(req),
+  }, req.body.PhoneNumber)
 
   res.setHeader('Content-Type', 'application/xml')
   res.setHeader('Cache-Control', 'public, max-age=0')
@@ -49,7 +51,6 @@ module.exports.track = function (req, res) {
     res.setHeader('Content-Type', 'application/xml')
     res.status(200).end()
     return
-
   }
 
   /* we don't need this leg we are just interested in the
@@ -59,7 +60,6 @@ module.exports.track = function (req, res) {
     res.setHeader('Content-Type', 'application/xml')
     res.status(200).end()
     return
-
   }
 
   let call = {}
@@ -83,20 +83,20 @@ module.exports.track = function (req, res) {
   Call.findOneAndUpdate({
     'sid': req.body.CallSid,
   },
-  call, {
-    new: true,
-    upsert: true,
-    runValidators: true,
-  }).then(function (callStored) {
-    console.log(`stored call event ${callStored.status}, id is ${callStored._id}`)
+    call, {
+      new: true,
+      upsert: true,
+      runValidators: true,
+    }).then(function (callStored) {
+      console.log(`stored call event ${callStored.status}, id is ${callStored._id}`)
 
-    res.setHeader('Content-Type', 'application/xml')
-    res.status(200).end()
-  }).catch(function (error) {
-    console.log(error)
-    res.setHeader('Content-Type', 'application/xml')
-    res.status(500).end()
-  })
+      res.setHeader('Content-Type', 'application/xml')
+      res.status(200).end()
+    }).catch(function (error) {
+      console.log(error)
+      res.setHeader('Content-Type', 'application/xml')
+      res.status(500).end()
+    })
 
 }
 
@@ -117,7 +117,7 @@ module.exports.history = function (req, res) {
       console.log('timestamp set, check if there was any update since: %s', req.query.timestamp)
 
       Call.count({ 'userId': req.user._id, updatedAt: { '$gte': new Date(req.query.timestamp) } }).then(function (count) {
-          /* the call history was updated in the meantime */
+        /* the call history was updated in the meantime */
         if (count > 0) {
           query.limit = query.start + query.limit
           query.start = 0
@@ -136,9 +136,9 @@ module.exports.history = function (req, res) {
   }).then(function (result) {
 
     return Call.find({ 'userId': req.user._id })
-               .sort({ updatedAt: 'desc' })
-               .skip(query.start)
-               .limit((query.limit + 1))
+      .sort({ updatedAt: 'desc' })
+      .skip(query.start)
+      .limit((query.limit + 1))
 
   }).then(function (calls) {
     if (calls && calls.length === (query.limit + 1)) {
@@ -157,20 +157,33 @@ module.exports.history = function (req, res) {
 }
 
 module.exports.token = function (req, res) {
-  let capability = twilio.Capability(req.user.configuration.decrypted.accountSid, req.user.configuration.decrypted.authToken) // eslint-disable-line new-cap,  max-len
+  const ClientCapability = Twilio.jwt.ClientCapability
+
+  const capability = new ClientCapability({
+    accountSid: req.user.configuration.decrypted.accountSid,
+    authToken: req.user.configuration.decrypted.authToken,
+    ttl: 180
+  })
 
   if (req.user.configuration.phone.inbound.isActive === true) {
-    capability.allowClientIncoming(req.user.configuration.twilio.clientName)
+    capability.addScope(
+      new ClientCapability.IncomingClientScope(req.user.configuration.twilio.clientName)
+    )
   }
 
   if (req.user.configuration.phone.outbound.isActive === true) {
-    capability.allowClientOutgoing(req.user.configuration.twilio.applicationSid)
+    capability.addScope(
+      new ClientCapability.OutgoingClientScope({
+        applicationSid: req.user.configuration.twilio.applicationSid,
+        clientName: req.user.configuration.twilio.clientName
+      })
+    )
   }
 
-  let token = { token: capability.generate(600) }
+  const token = { token: capability.toJwt() }
 
   res.setHeader('Content-Type', 'application/json')
   res.setHeader('Cache-Control', 'public, max-age=0')
-  res.send(JSON.stringify(token, null, 3))
+  res.status(200).send(JSON.stringify(token, null, 3))
 }
 
