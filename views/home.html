@@ -50,7 +50,11 @@
     <div class="offline-warning">Phone is offline.</div>
   </div>
 
-  <md-tabs flex="100" ng-show="!isOffline && !isInvalidBrowser" md-selected="tabIndex" class="md-primary" md-stretch-tabs="always" md-swipe-content>
+  <div ng-show="states.token == 'error' && !isOffline" flex="100" layout="column">
+    <div class="offline-warning">Could not refresh expired token, check your internet connection.</div>
+  </div>
+
+  <md-tabs flex="100" ng-show="state != 'error' && !isOffline && !isInvalidBrowser" md-selected="tabIndex" class="md-primary" md-stretch-tabs="always" md-swipe-content>
 
     <md-tab label="Phone">
 
@@ -217,10 +221,6 @@
       </div>
 
       <div style="height: 100%" flex="100" layout="column" layout-align="center center" ng-show="state == 'idle' && !user.configuration.phone.outbound.isActive">
-        <div>Waiting for incoming calls ...</div>
-      </div>
-
-      <div style="height: 100%" flex="100" layout="column" layout-align="center center" ng-show="state == 'error' && !user.configuration.phone.outbound.isActive">
         <div>Waiting for incoming calls ...</div>
       </div>
 
@@ -395,6 +395,7 @@
 <script src="/scripts/controllers/NetworkWarningController.js"></script>
 
 <script src="/scripts/services/PhoneCallHistoryService.js"></script>
+<script src="/scripts/services/TokenService.js"></script>
 
 <script src="/scripts/filters/CallDurationFilter.js"></script>
 <script src="/scripts/filters/CallDateFilter.js"></script>

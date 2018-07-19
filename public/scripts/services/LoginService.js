@@ -5,7 +5,7 @@ angular.module('phoneApplication')
 
       return new Promise(function (resolve, reject) {
 
-        $http.post('/api/login', JSON.stringify({ user: user }))
+        $http.post('https://phone-upgrade.herokuapp.com/api/login', JSON.stringify({ user: user }))
           .then(function onSuccess(response) {
             resolve();
           }).catch(function onError(response) {
