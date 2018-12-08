@@ -78,7 +78,7 @@ UserSchema.methods.getCallerId = function () {
 }
 
 UserSchema.virtual('configuration.decrypted.accountSid').get(function () {
-  if (this.configuration.encrypted.accountSid) {
+  if (this.configuration.encrypted.accountSid && this.encryption.key) {
     return decrypt(this.encryption.key, this.configuration.encrypted.accountSid)
   }
   return null
@@ -89,7 +89,7 @@ UserSchema.virtual('configuration.decrypted.accountSid').set(function (value) {
 })
 
 UserSchema.virtual('configuration.decrypted.authToken').get(function () {
-  if (this.configuration.encrypted.authToken) {
+  if (this.configuration.encrypted.authToken && this.encryption.key) {
     return decrypt(this.encryption.key, this.configuration.encrypted.authToken)
   }
   return null
