@@ -14,7 +14,7 @@
     "client-sessions": "^0.7",
     "compression": "^1.7.3",
     "express": "^4.16.4",
-    "mongoose": "^5.3.15",
+    "mongoose": "^5.2.3",
     "mustache": "^2.3.2",
     "twilio": "^3.25.0"
   },
