@@ -22,6 +22,7 @@ app.set('session', 'eatyourowndogfood')
 app.use(compression())
 app.enable('trust proxy')
 
+/*
 app.use(function (req, res, next) {
   if (req.secure) {
     next()
@@ -29,6 +30,7 @@ app.use(function (req, res, next) {
     res.redirect('https://' + req.headers.host + req.url)
   }
 })
+*/
 
 app.use('/api/register', require('./router-register.js'))
 app.use('/api/login', require('./router-login.js'))
@@ -44,6 +46,7 @@ app.use('/styles', express.static(path.join(__dirname, '/public/styles'), { etag
 app.use('/templates', express.static(path.join(__dirname, '/public/templates'), { etag: false }))
 
 app.set('etag', false)
+app.disable('x-powered-by');
 
 app.listen(app.get('port'), function onStart() {
   console.log('magic happens on port', app.get('port'))
