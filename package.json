@@ -1,6 +1,6 @@
 {
   "name": "twilio-phone-ng",
-  "version": "1.1.0",
+  "version": "1.2.0",
   "description": "A simple phone built with Twilio Client",
   "main": "app.js",
   "scripts": {
@@ -8,13 +8,13 @@
     "lint": "./node_modules/.bin/eslint . || exit 0"
   },
   "dependencies": {
-    "ajv": "^4.7",
-    "bcrypt": "^0.8.7",
+    "ajv": "^4.11.8",
+    "bcrypt": "^3.0.2",
     "body-parser": "^1.18.3",
-    "client-sessions": "^0.7",
+    "client-sessions": "^0.8.0",
     "compression": "^1.7.3",
     "express": "^4.16.4",
-    "mongoose": "^5.2.3",
+    "mongoose": "^5.3.15",
     "mustache": "^2.3.2",
     "twilio": "^3.25.0"
   },
