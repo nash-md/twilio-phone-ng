@@ -12,11 +12,11 @@
     "bcrypt": "^0.8.7",
     "body-parser": "^1.18.3",
     "client-sessions": "^0.7",
-    "compression": "^1.7.2",
-    "express": "^4.16.3",
-    "mongoose": "^5.2.3",
-    "mustache": "^2.2.1",
-    "twilio": "^3.17.6"
+    "compression": "^1.7.3",
+    "express": "^4.16.4",
+    "mongoose": "^5.3.15",
+    "mustache": "^2.3.2",
+    "twilio": "^3.25.0"
   },
   "devDependencies": {
     "eslint": "^3.5.x",
