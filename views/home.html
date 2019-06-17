@@ -224,7 +224,7 @@
         <div>Waiting for incoming calls ...</div>
       </div>
 
-      <div ng-show="state == 'idle' && user.configuration.phone.outbound.isActive" ng-controller="PhoneKeypadController" flex="100" layout="column">
+      <div ng-show="state == 'idle' && user.configuration.phone.outbound.isActive" ng-controller="PhoneKeypadController" style="height: 100%" flex="100" layout="column">
 
         <form class="keypad-display" name="callForm" flex="20" layout="column">
           <div layout="row" flex="100">
