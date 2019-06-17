@@ -52,7 +52,11 @@ function PhoneController($scope, $rootScope, $http, $window, $timeout, tokenServ
 $scope.setupDevice = function (token) {
 
   try {
-    Twilio.Device.setup(token, { debug: true, dscp: true });
+    Twilio.Device.setup(token, { 
+      debug: true,
+      dscp: true,
+      codecPreferences: ['opus', 'pcmu']
+    });
   } catch (e) {
     $scope.invalidBrowserMessage = e.message;
     $scope.isInvalidBrowser = true;
