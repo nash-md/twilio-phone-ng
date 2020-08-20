@@ -9,7 +9,7 @@
   },
   "dependencies": {
     "ajv": "^4.11.8",
-    "bcrypt": "^3.0.2",
+    "bcrypt": "^5.0.0",
     "body-parser": "^1.18.3",
     "client-sessions": "^0.8.0",
     "compression": "^1.7.3",
