@@ -10,13 +10,13 @@
   "dependencies": {
     "ajv": "^4.11.8",
     "bcrypt": "^5.0.0",
-    "body-parser": "^1.18.3",
+    "body-parser": "^1.19.0",
     "client-sessions": "^0.8.0",
-    "compression": "^1.7.3",
-    "express": "^4.16.4",
-    "mongoose": "^5.3.15",
+    "compression": "^1.7.4",
+    "express": "^4.17.1",
+    "mongoose": "^5.11.18",
     "mustache": "^2.3.2",
-    "twilio": "^3.25.0"
+    "twilio": "^3.57.0"
   },
   "devDependencies": {
     "eslint": "^3.5.x",
@@ -30,7 +30,7 @@
     "eslint-plugin-standard": "^2.0.1"
   },
   "engines": {
-    "node": "8.9.x"
+    "node": "12.x"
   },
   "files": [
     "README.md",
